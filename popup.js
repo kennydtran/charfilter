@@ -66,8 +66,8 @@ function loadVttUrls() {
 function loadVttInApp(url) {
     chrome.runtime.sendMessage({ action: 'fetchVtt', url: url }, (response) => {
         if (response.success) {
-            // Get raw VTT content without parsing
-            const rawText = extractRawText(response.content);
+            // Send COMPLETELY RAW VTT content - no filtering at all
+            const rawVttContent = response.content;
             
             chrome.tabs.query({ 
                 url: [
@@ -79,11 +79,11 @@ function loadVttInApp(url) {
                     chrome.tabs.update(tabs[0].id, { active: true });
                     chrome.tabs.sendMessage(tabs[0].id, { 
                         action: 'loadRawText', 
-                        text: rawText 
+                        text: rawVttContent 
                     });
                 } else {
                     chrome.tabs.create({ 
-                        url: `https://charfilter.netlify.app?vtt=${encodeURIComponent(rawText)}` 
+                        url: `https://charfilter.netlify.app?vtt=${encodeURIComponent(rawVttContent)}` 
                     });
                 }
             });
@@ -91,27 +91,4 @@ function loadVttInApp(url) {
             alert('Failed to fetch VTT: ' + response.error);
         }
     });
-}
-
-function extractRawText(vttContent) {
-    const lines = vttContent.split('\n');
-    const textLines = [];
-
-    for (let i = 0; i < lines.length; i++) {
-        const line = lines[i].trim();
-        
-        // Skip VTT metadata and timestamps
-        if (line === '' || line === 'WEBVTT' || line.startsWith('Kind:') || 
-            line.startsWith('Language:') || line.match(/^\d+$/) || 
-            line.match(/^\d{2}:\d{2}:\d{2}\.\d{3}\s*-->\s*\d{2}:\d{2}:\d{2}\.\d{3}/)) {
-            continue;
-        }
-        
-        if (line && !line.startsWith('NOTE')) {
-            textLines.push(line);
-        }
-    }
-
-    // Return raw text with spaces between lines
-    return textLines.join(' ');
 }
