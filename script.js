@@ -36,7 +36,10 @@ document.addEventListener('DOMContentLoaded', function() {
 
     // Listen for messages from the extension
     window.addEventListener('message', (event) => {
-        if (event.data.type === 'VTT_DETECTED') {
+        if (event.data.type === 'EXTENSION_CONNECTED') {
+            extensionConnected = true;
+            updateExtensionStatus();
+        } else if (event.data.type === 'VTT_DETECTED') {
             extensionConnected = true;
             updateExtensionStatus();
             displayVttFiles(event.data.urls);

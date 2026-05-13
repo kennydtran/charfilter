@@ -1,23 +1,36 @@
 // Listen for messages from the extension
 chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === 'loadText') {
+    if (request.action === 'loadText' || request.action === 'loadRawText') {
         const inputText = document.getElementById('inputText');
         if (inputText) {
             inputText.value = request.text;
-            showNotification('Captions loaded! Click "Generate Filtered Text" to process.');
+            showNotification('Raw captions loaded! Click "Generate Filtered Text" to clean the text.');
         }
+        // Signal that extension is connected
+        window.postMessage({
+            type: 'EXTENSION_CONNECTED'
+        }, '*');
     } else if (request.action === 'vttDetected') {
         // Notify the page that VTT files were detected
         window.postMessage({
             type: 'VTT_DETECTED',
             urls: request.urls
         }, '*');
+        // Signal that extension is connected
+        window.postMessage({
+            type: 'EXTENSION_CONNECTED'
+        }, '*');
     }
     sendResponse({ success: true });
 });
 
-// Request initial VTT list when page loads
+// Request initial VTT list when page loads and signal extension is connected
 setTimeout(() => {
+    // Signal extension is connected
+    window.postMessage({
+        type: 'EXTENSION_CONNECTED'
+    }, '*');
+    
     chrome.runtime.sendMessage({ action: 'getVttUrls' }, (response) => {
         if (response && response.urls && response.urls.length > 0) {
             window.postMessage({
