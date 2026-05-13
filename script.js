@@ -51,10 +51,9 @@ document.addEventListener('DOMContentLoaded', function() {
             }
 
             const vttContent = await response.text();
-            const parsedText = parseVTT(vttContent);
             
-            inputText.value = parsedText;
-            alert('Captions loaded successfully! Now click "Generate Filtered Text" to clean the text.');
+            inputText.value = vttContent;
+            alert('Raw VTT content loaded! Now click "Generate Filtered Text" to clean the text.');
         } catch (error) {
             console.error('Error:', error);
             alert(`Failed to load captions: ${error.message}\n\nTip: Make sure you copied the complete VTT URL from the Network tab.`);
@@ -62,27 +61,6 @@ document.addEventListener('DOMContentLoaded', function() {
             fetchVttBtn.textContent = 'Load Captions';
             fetchVttBtn.disabled = false;
         }
-    }
-
-    function parseVTT(vttContent) {
-        const lines = vttContent.split('\n');
-        const textLines = [];
-
-        for (let i = 0; i < lines.length; i++) {
-            const line = lines[i].trim();
-            
-            if (line === '' || line === 'WEBVTT' || line.startsWith('Kind:') || 
-                line.startsWith('Language:') || line.match(/^\d+$/) || 
-                line.match(/^\d{2}:\d{2}:\d{2}\.\d{3}\s*-->\s*\d{2}:\d{2}:\d{2}\.\d{3}/)) {
-                continue;
-            }
-            
-            if (line && !line.startsWith('NOTE')) {
-                textLines.push(line);
-            }
-        }
-
-        return textLines.join(' ');
     }
 
     function filterText() {
