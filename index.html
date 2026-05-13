@@ -3,91 +3,89 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Text Filter - Remove Unwanted Characters</title>
+    <title>Charfilter kmt.</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <div class="container">
         <header>
-            <h1>Text Filter</h1>
-            <p class="subtitle">Remove unwanted characters from your text</p>
+            <h1>Charfilter</h1>
+            <p class="subtitle">kennymadethis.</p>
         </header>
 
-        <div class="vtt-section">
-            <label for="vttUrl">VTT Caption URL:</label>
-            <div class="vtt-input-group">
-                <input 
-                    type="text" 
-                    id="vttUrl" 
-                    placeholder="Paste VTT link here (e.g., https://example.com/captions.vtt)"
-                    class="vtt-input"
-                >
-                <button id="fetchVttBtn" class="fetch-btn">Load Captions</button>
+        <div class="content-wrapper">
+            <div class="section-bg section-vtt">
+                <div class="vtt-section">
+                    <label for="vttUrl">VTT link</label>
+                    <div class="vtt-input-group">
+                        <input 
+                            type="text" 
+                            id="vttUrl" 
+                            placeholder="Paste here."
+                            class="vtt-input"
+                        >
+                        <button id="fetchVttBtn" class="fetch-btn">Load</button>
+                    </div>
+                </div>
             </div>
-        </div>
 
-        <div class="filter-options">
-            <h3>Select what to remove:</h3>
-            <div class="checkbox-group">
-                <label class="checkbox-label">
-                    <input type="checkbox" id="removeNumbers" checked>
-                    <span>Numbers (0-9)</span>
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="removeHyphens" checked>
-                    <span>Hyphens (-)</span>
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="removeColons" checked>
-                    <span>Colons (:)</span>
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="removeGreaterThan" checked>
-                    <span>Greater Than (&gt;)</span>
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="removeLessThan" checked>
-                    <span>Less Than (&lt;)</span>
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="removeSlashes" checked>
-                    <span>Forward Slashes (/)</span>
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="removePeriodsNextToNumbers" checked>
-                    <span>Periods Next to Numbers</span>
-                </label>
-                <label class="checkbox-label">
-                    <input type="checkbox" id="keepSpaces" checked>
-                    <span>Keep Spaces</span>
-                </label>
+            <button id="toggleFiltersBtn" class="toggle-filters-btn">
+                <span class="filter-text">Filters</span>
+                <svg class="arrow-icon" width="16" height="16" viewBox="0 0 16 16" fill="none">
+                    <path d="M6 4L10 8L6 12" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                </svg>
+            </button>
+
+            <div class="filter-options" id="filterOptions">
+                <div class="filter-buttons">
+                    <button class="filter-btn" data-filter="removeNumbers">Number</button>
+                    <button class="filter-btn" data-filter="removeHyphens">Hyphen</button>
+                    <button class="filter-btn" data-filter="removeColons">Colon</button>
+                    <button class="filter-btn" data-filter="removeGreaterThan">Greater Than</button>
+                    <button class="filter-btn" data-filter="removeLessThan">Less Than</button>
+                    <button class="filter-btn" data-filter="removeSlashes">Slash</button>
+                    <button class="filter-btn" data-filter="removePeriodsNextToNumbers">Period</button>
+                    <button class="filter-btn active" data-filter="keepSpaces">Whitespace</button>
+                    <button class="filter-btn" data-filter="removeLineBreaks">Line Break</button>
+                </div>
             </div>
-        </div>
 
-        <div class="text-section">
-            <label for="inputText">Input Text:</label>
-            <textarea 
-                id="inputText" 
-                placeholder="Paste your text here or load captions from a VTT URL above..."
-                rows="10"
-            ></textarea>
-        </div>
+            <div class="io-sections">
+                <div class="section-bg section-text section-input">
+                    <div class="section-text-inner">
+                        <div class="text-section">
+                            <label for="inputText">Input</label>
+                            <textarea 
+                                id="inputText" 
+                                placeholder="Paste here."
+                                rows="8"
+                            ></textarea>
+                        </div>
+                        <button id="generateBtn" class="generate-btn">Filter</button>
+                    </div>
+                </div>
 
-        <button id="generateBtn" class="generate-btn">Generate Filtered Text</button>
+                <div class="section-bg section-text section-output">
+                    <div class="section-text-inner">
+                        <div class="text-section">
+                            <label for="outputText">Output</label>
+                            <textarea 
+                                id="outputText" 
+                                placeholder="Appears here."
+                                rows="8"
+                                readonly
+                            ></textarea>
+                        </div>
 
-        <div class="text-section">
-            <label for="outputText">Filtered Output:</label>
-            <textarea 
-                id="outputText" 
-                placeholder="Your filtered text will appear here..."
-                rows="10"
-                readonly
-            ></textarea>
-        </div>
-
-        <div class="action-buttons">
-            <button id="copyBtn" class="action-btn">Copy to Clipboard</button>
-            <button id="clearBtn" class="action-btn secondary">Clear All</button>
+                        <div class="action-buttons">
+                            <button id="copyBtn" class="action-btn primary">Copy</button>
+                            <button id="clearBtn" class="action-btn secondary">
+                                <span class="clear-text">Clear</span>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
         </div>
     </div>
 

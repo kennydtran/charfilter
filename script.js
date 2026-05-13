@@ -6,26 +6,52 @@ document.addEventListener('DOMContentLoaded', function() {
     const clearBtn = document.getElementById('clearBtn');
     const vttUrl = document.getElementById('vttUrl');
     const fetchVttBtn = document.getElementById('fetchVttBtn');
+    const toggleFiltersBtn = document.getElementById('toggleFiltersBtn');
+    const filterOptions = document.getElementById('filterOptions');
     
-    const removeNumbers = document.getElementById('removeNumbers');
-    const removeHyphens = document.getElementById('removeHyphens');
-    const removeColons = document.getElementById('removeColons');
-    const removeGreaterThan = document.getElementById('removeGreaterThan');
-    const removeLessThan = document.getElementById('removeLessThan');
-    const removeSlashes = document.getElementById('removeSlashes');
-    const removePeriodsNextToNumbers = document.getElementById('removePeriodsNextToNumbers');
-    const keepSpaces = document.getElementById('keepSpaces');
+    // Filter state object
+    const filterState = {
+        removeNumbers: true,
+        removeHyphens: true,
+        removeColons: true,
+        removeGreaterThan: true,
+        removeLessThan: true,
+        removeSlashes: true,
+        removePeriodsNextToNumbers: true,
+        keepSpaces: true,
+        removeLineBreaks: true
+    };
+
+    // Initialize filter buttons
+    const filterButtons = document.querySelectorAll('.filter-btn');
+    filterButtons.forEach(btn => {
+        const filter = btn.dataset.filter;
+        if (filterState[filter]) {
+            btn.classList.add('active');
+        }
+        
+        btn.addEventListener('click', function() {
+            this.classList.toggle('active');
+            filterState[filter] = this.classList.contains('active');
+        });
+    });
 
     generateBtn.addEventListener('click', filterText);
     copyBtn.addEventListener('click', copyToClipboard);
     clearBtn.addEventListener('click', clearAll);
     fetchVttBtn.addEventListener('click', fetchFromVtt);
+    toggleFiltersBtn.addEventListener('click', toggleFilters);
 
     inputText.addEventListener('keydown', function(e) {
         if (e.ctrlKey && e.key === 'Enter') {
             filterText();
         }
     });
+
+    function toggleFilters() {
+        filterOptions.classList.toggle('show');
+        toggleFiltersBtn.classList.toggle('active');
+    }
 
     async function fetchFromVtt() {
         const url = vttUrl.value.trim();
@@ -47,18 +73,17 @@ document.addEventListener('DOMContentLoaded', function() {
             const response = await fetch(url);
             
             if (!response.ok) {
-                throw new Error('Failed to fetch VTT file');
+                throw new Error('Invalid VTT URL Link');
             }
 
             const vttContent = await response.text();
             
             inputText.value = vttContent;
-            alert('Raw VTT content loaded! Now click "Generate Filtered Text" to clean the text.');
         } catch (error) {
             console.error('Error:', error);
-            alert(`Failed to load captions: ${error.message}\n\nTip: Make sure you copied the complete VTT URL from the Network tab.`);
+            alert(`\n${error.message}\n\nPlease copy the complete VTT URL Link from the Network tab in Inspect Element.`);
         } finally {
-            fetchVttBtn.textContent = 'Load Captions';
+            fetchVttBtn.textContent = 'Load';
             fetchVttBtn.disabled = false;
         }
     }
@@ -73,7 +98,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let filtered = text;
 
-        if (removePeriodsNextToNumbers.checked) {
+        if (filterState.removePeriodsNextToNumbers) {
             filtered = filtered.replace(/\d+\.\d*/g, function(match) {
                 return match.replace(/\./g, '');
             });
@@ -82,35 +107,47 @@ document.addEventListener('DOMContentLoaded', function() {
             });
         }
 
-        if (removeNumbers.checked) {
+        if (filterState.removeNumbers) {
             filtered = filtered.replace(/[0-9]/g, '');
         }
 
-        if (removeHyphens.checked) {
+        if (filterState.removeHyphens) {
             filtered = filtered.replace(/-/g, '');
         }
 
-        if (removeColons.checked) {
+        if (filterState.removeColons) {
             filtered = filtered.replace(/:/g, '');
         }
 
-        if (removeGreaterThan.checked) {
+        if (filterState.removeGreaterThan) {
             filtered = filtered.replace(/>/g, '');
         }
 
-        if (removeLessThan.checked) {
+        if (filterState.removeLessThan) {
             filtered = filtered.replace(/</g, '');
         }
 
-        if (removeSlashes.checked) {
+        if (filterState.removeSlashes) {
             filtered = filtered.replace(/\//g, '');
         }
 
-        if (!keepSpaces.checked) {
-            filtered = filtered.replace(/\s/g, '');
+        if (filterState.removeLineBreaks) {
+            filtered = filtered.replace(/\r?\n/g, ' ');
         }
 
-        filtered = filtered.replace(/\s+/g, ' ').trim();
+        if (!filterState.keepSpaces) {
+            filtered = filtered.replace(/\s/g, '');
+        } else {
+            // Only collapse consecutive spaces (not line breaks) if we're keeping line breaks
+            if (!filterState.removeLineBreaks) {
+                filtered = filtered.replace(/ +/g, ' ');
+            } else {
+                // If removing line breaks, collapse all whitespace to single spaces
+                filtered = filtered.replace(/\s+/g, ' ');
+            }
+        }
+        
+        filtered = filtered.trim();
 
         outputText.value = filtered;
 
@@ -131,7 +168,7 @@ document.addEventListener('DOMContentLoaded', function() {
         
         const originalText = copyBtn.textContent;
         copyBtn.textContent = 'Copied!';
-        copyBtn.style.background = '#20c997';
+        copyBtn.style.background = '#10b981';
         
         setTimeout(() => {
             copyBtn.textContent = originalText;
@@ -142,6 +179,7 @@ document.addEventListener('DOMContentLoaded', function() {
     function clearAll() {
         inputText.value = '';
         outputText.value = '';
+        vttUrl.value = '';
         inputText.focus();
     }
 });
