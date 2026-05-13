@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Text Filter - Remove Unwanted Characters</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Text Filter</h1>
+            <p class="subtitle">Remove unwanted characters from your text</p>
+        </header>
+
+        <div class="filter-options">
+            <h3>Select what to remove:</h3>
+            <div class="checkbox-group">
+                <label class="checkbox-label">
+                    <input type="checkbox" id="removeNumbers" checked>
+                    <span>Numbers (0-9)</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="removeHyphens" checked>
+                    <span>Hyphens (-)</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="removeColons" checked>
+                    <span>Colons (:)</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="removeGreaterThan" checked>
+                    <span>Greater Than (&gt;)</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="removeLessThan" checked>
+                    <span>Less Than (&lt;)</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="removeSlashes" checked>
+                    <span>Forward Slashes (/)</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="removePeriodsNextToNumbers" checked>
+                    <span>Periods Next to Numbers</span>
+                </label>
+                <label class="checkbox-label">
+                    <input type="checkbox" id="keepSpaces" checked>
+                    <span>Keep Spaces</span>
+                </label>
+            </div>
+        </div>
+
+        <div class="text-section">
+            <label for="inputText">Input Text:</label>
+            <textarea 
+                id="inputText" 
+                placeholder="Paste your text here..."
+                rows="10"
+            ></textarea>
+        </div>
+
+        <button id="generateBtn" class="generate-btn">Generate Filtered Text</button>
+
+        <div class="text-section">
+            <label for="outputText">Filtered Output:</label>
+            <textarea 
+                id="outputText" 
+                placeholder="Your filtered text will appear here..."
+                rows="10"
+                readonly
+            ></textarea>
+        </div>
+
+        <div class="action-buttons">
+            <button id="copyBtn" class="action-btn">Copy to Clipboard</button>
+            <button id="clearBtn" class="action-btn secondary">Clear All</button>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
