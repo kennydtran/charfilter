@@ -5,6 +5,14 @@ document.addEventListener('DOMContentLoaded', function() {
     const copyBtn = document.getElementById('copyBtn');
     const clearBtn = document.getElementById('clearBtn');
     
+    const vttList = document.getElementById('vttList');
+    const vttCount = document.getElementById('vttCount');
+    const vttDetector = document.getElementById('vttDetector');
+    const extensionStatus = document.getElementById('extensionStatus');
+    const clearVttBtn = document.getElementById('clearVttBtn');
+    const vttEmptyMessage = document.getElementById('vttEmptyMessage');
+    const installHelp = document.getElementById('installHelp');
+    
     const removeNumbers = document.getElementById('removeNumbers');
     const removeHyphens = document.getElementById('removeHyphens');
     const removeColons = document.getElementById('removeColons');
@@ -14,15 +22,174 @@ document.addEventListener('DOMContentLoaded', function() {
     const removePeriodsNextToNumbers = document.getElementById('removePeriodsNextToNumbers');
     const keepSpaces = document.getElementById('keepSpaces');
 
+    let extensionConnected = false;
+
     generateBtn.addEventListener('click', filterText);
     copyBtn.addEventListener('click', copyToClipboard);
     clearBtn.addEventListener('click', clearAll);
+    clearVttBtn.addEventListener('click', clearAllVtt);
+    
+    installHelp.addEventListener('click', (e) => {
+        e.preventDefault();
+        alert('To install the Chrome Extension:\n\n1. Open chrome://extensions/\n2. Enable "Developer mode"\n3. Click "Load unpacked"\n4. Select the folder containing this app\n5. Refresh this page');
+    });
+
+    // Listen for messages from the extension
+    window.addEventListener('message', (event) => {
+        if (event.data.type === 'VTT_DETECTED') {
+            extensionConnected = true;
+            updateExtensionStatus();
+            displayVttFiles(event.data.urls);
+        }
+    });
+
+    // Check if extension is installed
+    setTimeout(() => {
+        if (!extensionConnected) {
+            updateExtensionStatus();
+        }
+    }, 1000);
+
+    function updateExtensionStatus() {
+        if (extensionConnected) {
+            extensionStatus.className = 'extension-status connected';
+            extensionStatus.innerHTML = '<p style="color: #28a745; font-size: 0.95em;">✅ Extension connected! VTT files will be detected automatically.</p>';
+        } else {
+            extensionStatus.className = 'extension-status';
+            extensionStatus.innerHTML = '<p style="color: #f44336; font-size: 0.95em;">⚠️ Chrome Extension not detected. <a href="#" id="installHelp" style="color: #2196F3;">Install it here</a></p>';
+            document.getElementById('installHelp').addEventListener('click', (e) => {
+                e.preventDefault();
+                alert('To install the Chrome Extension:\n\n1. Open chrome://extensions/\n2. Enable "Developer mode"\n3. Click "Load unpacked"\n4. Select the folder: ' + window.location.origin + '\n5. Refresh this page');
+            });
+        }
+    }
+
+    function displayVttFiles(urls) {
+        vttCount.textContent = urls.length;
+        
+        if (urls.length === 0) {
+            vttList.innerHTML = '';
+            vttList.style.display = 'none';
+            vttEmptyMessage.style.display = 'block';
+            clearVttBtn.style.display = 'none';
+            return;
+        }
+        
+        vttList.style.display = 'flex';
+        vttEmptyMessage.style.display = 'none';
+        clearVttBtn.style.display = 'block';
+        vttList.innerHTML = '';
+        
+        urls.forEach(url => {
+            const item = document.createElement('div');
+            item.className = 'vtt-item';
+            
+            const info = document.createElement('div');
+            info.className = 'vtt-info';
+            const urlShort = url.length > 80 ? url.substring(0, 80) + '...' : url;
+            info.textContent = urlShort;
+            info.title = url;
+            
+            const loadBtn = document.createElement('button');
+            loadBtn.className = 'vtt-load-btn';
+            loadBtn.textContent = 'Load';
+            loadBtn.onclick = () => loadVttFromUrl(url);
+            
+            item.appendChild(info);
+            item.appendChild(loadBtn);
+            vttList.appendChild(item);
+        });
+    }
+
+    function clearAllVtt() {
+        if (typeof chrome !== 'undefined' && chrome.runtime) {
+            chrome.runtime.sendMessage({ action: 'clearVttUrls' }, () => {
+                displayVttFiles([]);
+            });
+        } else {
+            displayVttFiles([]);
+        }
+    }
+
+    async function loadVttFromUrl(url) {
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Failed to fetch VTT file');
+            }
+            const vttContent = await response.text();
+            const parsedText = parseVTT(vttContent);
+            inputText.value = parsedText;
+            alert('Captions loaded successfully! Now click "Generate Filtered Text" to clean the text.');
+        } catch (error) {
+            console.error('Error:', error);
+            alert(`Failed to load captions: ${error.message}`);
+        }
+    }
 
     inputText.addEventListener('keydown', function(e) {
         if (e.ctrlKey && e.key === 'Enter') {
             filterText();
         }
     });
+
+    async function fetchFromVtt() {
+        const url = vttUrl.value.trim();
+        
+        if (!url) {
+            alert('Please enter a VTT URL');
+            return;
+        }
+
+        if (!url.includes('.vtt')) {
+            alert('Please enter a valid VTT URL (should end with .vtt)');
+            return;
+        }
+
+        fetchVttBtn.textContent = 'Loading...';
+        fetchVttBtn.disabled = true;
+
+        try {
+            const response = await fetch(url);
+            
+            if (!response.ok) {
+                throw new Error('Failed to fetch VTT file');
+            }
+
+            const vttContent = await response.text();
+            const parsedText = parseVTT(vttContent);
+            
+            inputText.value = parsedText;
+            alert('Captions loaded successfully! Now click "Generate Filtered Text" to clean the text.');
+        } catch (error) {
+            console.error('Error:', error);
+            alert(`Failed to load captions: ${error.message}\n\nTip: Make sure you copied the complete VTT URL from the Network tab.`);
+        } finally {
+            fetchVttBtn.textContent = 'Load Captions';
+            fetchVttBtn.disabled = false;
+        }
+    }
+
+    function parseVTT(vttContent) {
+        const lines = vttContent.split('\n');
+        const textLines = [];
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i].trim();
+            
+            if (line === '' || line === 'WEBVTT' || line.startsWith('Kind:') || 
+                line.startsWith('Language:') || line.match(/^\d+$/) || 
+                line.match(/^\d{2}:\d{2}:\d{2}\.\d{3}\s*-->\s*\d{2}:\d{2}:\d{2}\.\d{3}/)) {
+                continue;
+            }
+            
+            if (line && !line.startsWith('NOTE')) {
+                textLines.push(line);
+            }
+        }
+
+        return textLines.join(' ');
+    }
 
     function filterText() {
         let text = inputText.value;

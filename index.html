@@ -13,6 +13,27 @@
             <p class="subtitle">Remove unwanted characters from your text</p>
         </header>
 
+        <div class="vimeo-section">
+            <h3>🎬 VTT Caption Detector</h3>
+            <div class="extension-status" id="extensionStatus">
+                <p style="color: #f44336; font-size: 0.95em;">
+                    ⚠️ Chrome Extension not detected. <a href="#" id="installHelp" style="color: #2196F3;">Install it here</a>
+                </p>
+            </div>
+            <div id="vttDetector" style="margin-top: 15px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px;">
+                    <p style="color: #555; font-size: 0.9em; margin: 0;">
+                        <strong>Detected VTT Files:</strong> <span id="vttCount">0</span>
+                    </p>
+                    <button id="clearVttBtn" class="clear-vtt-btn" style="display: none;">Clear All</button>
+                </div>
+                <div id="vttList" class="vtt-list"></div>
+                <p id="vttEmptyMessage" style="color: #999; text-align: center; padding: 20px; display: none;">
+                    Play a video with captions on any tab.<br>VTT files will appear here automatically!
+                </p>
+            </div>
+        </div>
+
         <div class="filter-options">
             <h3>Select what to remove:</h3>
             <div class="checkbox-group">
@@ -55,7 +76,7 @@
             <label for="inputText">Input Text:</label>
             <textarea 
                 id="inputText" 
-                placeholder="Paste your text here..."
+                placeholder="Paste your text here or use the Vimeo import above..."
                 rows="10"
             ></textarea>
         </div>

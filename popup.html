@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <style>
+        body {
+            width: 400px;
+            padding: 15px;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+        }
+        h2 {
+            color: #333;
+            margin: 0 0 10px 0;
+            font-size: 1.2em;
+        }
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+        .count {
+            background: #4CAF50;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 12px;
+            font-size: 0.9em;
+            font-weight: bold;
+        }
+        .vtt-list {
+            max-height: 400px;
+            overflow-y: auto;
+        }
+        .vtt-item {
+            background: #f5f5f5;
+            padding: 10px;
+            margin-bottom: 8px;
+            border-radius: 6px;
+            border-left: 4px solid #2196F3;
+        }
+        .vtt-url {
+            font-size: 0.8em;
+            color: #666;
+            word-break: break-all;
+            margin-bottom: 8px;
+        }
+        .vtt-actions {
+            display: flex;
+            gap: 8px;
+        }
+        button {
+            padding: 6px 12px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 0.9em;
+            font-weight: 600;
+            transition: all 0.2s;
+        }
+        .load-btn {
+            background: #4CAF50;
+            color: white;
+            flex: 1;
+        }
+        .load-btn:hover {
+            background: #45a049;
+        }
+        .copy-btn {
+            background: #2196F3;
+            color: white;
+        }
+        .copy-btn:hover {
+            background: #0b7dda;
+        }
+        .clear-btn {
+            background: #f44336;
+            color: white;
+            width: 100%;
+            margin-top: 10px;
+        }
+        .clear-btn:hover {
+            background: #da190b;
+        }
+        .empty {
+            text-align: center;
+            color: #999;
+            padding: 40px 20px;
+        }
+        .open-app-btn {
+            background: #667eea;
+            color: white;
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+        }
+        .open-app-btn:hover {
+            background: #5568d3;
+        }
+    </style>
+</head>
+<body>
+    <button class="open-app-btn" id="openApp">Open Text Filter App</button>
+    
+    <div class="header">
+        <h2>Detected VTT Files</h2>
+        <span class="count" id="count">0</span>
+    </div>
+    
+    <div id="vttList" class="vtt-list"></div>
+    
+    <button class="clear-btn" id="clearBtn">Clear All</button>
+    
+    <script src="popup.js"></script>
+</body>
+</html>
