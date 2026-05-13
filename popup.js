@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', () => {
     });
     
     document.getElementById('openApp').addEventListener('click', () => {
-        chrome.tabs.create({ url: 'http://localhost:8000' });
+        chrome.tabs.create({ url: 'https://charfilter.netlify.app' });
     });
 });
 
@@ -68,7 +68,12 @@ function loadVttInApp(url) {
         if (response.success) {
             const parsedText = parseVTT(response.content);
             
-            chrome.tabs.query({ url: 'http://localhost:8000/*' }, (tabs) => {
+            chrome.tabs.query({ 
+                url: [
+                    'http://localhost:8000/*',
+                    'https://charfilter.netlify.app/*'
+                ]
+            }, (tabs) => {
                 if (tabs.length > 0) {
                     chrome.tabs.update(tabs[0].id, { active: true });
                     chrome.tabs.sendMessage(tabs[0].id, { 
@@ -77,7 +82,7 @@ function loadVttInApp(url) {
                     });
                 } else {
                     chrome.tabs.create({ 
-                        url: `http://localhost:8000?vtt=${encodeURIComponent(parsedText)}` 
+                        url: `https://charfilter.netlify.app?vtt=${encodeURIComponent(parsedText)}` 
                     });
                 }
             });

@@ -22,7 +22,13 @@ chrome.webRequest.onCompleted.addListener(
 // Notify web app about detected VTT files
 async function notifyWebApp() {
   try {
-    const tabs = await chrome.tabs.query({ url: ["http://localhost:8000/*", "http://127.0.0.1:8000/*"] });
+    const tabs = await chrome.tabs.query({ 
+      url: [
+        "http://localhost:8000/*", 
+        "http://127.0.0.1:8000/*",
+        "https://charfilter.netlify.app/*"
+      ] 
+    });
     if (tabs.length > 0) {
       for (const tab of tabs) {
         chrome.tabs.sendMessage(tab.id, {

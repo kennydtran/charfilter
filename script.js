@@ -31,7 +31,7 @@ document.addEventListener('DOMContentLoaded', function() {
     
     installHelp.addEventListener('click', (e) => {
         e.preventDefault();
-        alert('To install the Chrome Extension:\n\n1. Open chrome://extensions/\n2. Enable "Developer mode"\n3. Click "Load unpacked"\n4. Select the folder containing this app\n5. Refresh this page');
+        alert('To install the Chrome Extension:\n\n1. Download the extension from GitHub:\n   https://github.com/kennydtran/charfilter\n2. Open chrome://extensions/\n3. Enable "Developer mode"\n4. Click "Load unpacked"\n5. Select the downloaded folder\n6. Refresh this page');
     });
 
     // Listen for messages from the extension
@@ -49,6 +49,18 @@ document.addEventListener('DOMContentLoaded', function() {
             updateExtensionStatus();
         }
     }, 1000);
+
+    // Check for VTT text in URL parameter (from extension)
+    const urlParams = new URLSearchParams(window.location.search);
+    const vttText = urlParams.get('vtt');
+    if (vttText) {
+        inputText.value = decodeURIComponent(vttText);
+        // Clear the URL parameter
+        window.history.replaceState({}, document.title, window.location.pathname);
+        setTimeout(() => {
+            alert('Captions loaded from extension! Click "Generate Filtered Text" to process.');
+        }, 500);
+    }
 
     function updateExtensionStatus() {
         if (extensionConnected) {
