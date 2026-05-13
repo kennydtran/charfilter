@@ -39,68 +39,27 @@ h1 {
     font-size: 1.1em;
 }
 
-.vimeo-section {
+.vtt-section {
     background: #e3f2fd;
     padding: 20px;
     border-radius: 10px;
     margin-bottom: 30px;
 }
 
-.vimeo-section h3 {
+.vtt-section label {
+    display: block;
     color: #333;
-    margin-bottom: 15px;
-    font-size: 1.2em;
-}
-
-.instructions {
-    background: white;
-    padding: 15px;
-    border-radius: 8px;
-    margin-bottom: 15px;
-    border-left: 4px solid #2196f3;
-}
-
-.instructions p {
+    font-weight: 600;
     margin-bottom: 10px;
-    color: #333;
+    font-size: 1.1em;
 }
 
-.instructions ol {
-    margin-left: 20px;
-    color: #555;
-    font-size: 0.95em;
-    line-height: 1.6;
-}
-
-.instructions li {
-    margin-bottom: 5px;
-}
-
-.instructions kbd {
-    background: #f4f4f4;
-    border: 1px solid #ccc;
-    border-radius: 3px;
-    padding: 2px 6px;
-    font-family: monospace;
-    font-size: 0.9em;
-}
-
-.instructions code {
-    background: #f4f4f4;
-    padding: 2px 6px;
-    border-radius: 3px;
-    font-family: monospace;
-    font-size: 0.9em;
-    color: #d63384;
-}
-
-.vimeo-input-group {
+.vtt-input-group {
     display: flex;
     gap: 10px;
-    margin-bottom: 10px;
 }
 
-.vimeo-input-group input {
+.vtt-input {
     flex: 1;
     padding: 12px;
     border: 2px solid #e0e0e0;
@@ -109,13 +68,13 @@ h1 {
     transition: border-color 0.3s ease;
 }
 
-.vimeo-input-group input:focus {
+.vtt-input:focus {
     outline: none;
     border-color: #2196f3;
 }
 
 .fetch-btn {
-    padding: 12px 20px;
+    padding: 12px 24px;
     background: #2196f3;
     color: white;
     border: none;
@@ -136,119 +95,10 @@ h1 {
     transform: translateY(0);
 }
 
-.vimeo-help {
-    color: #555;
-    font-size: 0.9em;
-    margin: 10px 0 5px 0;
-}
-
-.vtt-list {
-    display: flex;
-    flex-direction: column;
-    gap: 8px;
-    max-height: 200px;
-    overflow-y: auto;
-}
-
-.vtt-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
-    background: white;
-    border: 2px solid #e0e0e0;
-    border-radius: 8px;
-    transition: all 0.3s ease;
-}
-
-.vtt-item:hover {
-    border-color: #2196f3;
-    transform: translateX(5px);
-}
-
-.vtt-info {
-    flex: 1;
-    font-size: 0.85em;
-    color: #555;
-    word-break: break-all;
-    margin-right: 10px;
-}
-
-.vtt-load-btn {
-    padding: 8px 16px;
-    background: #4caf50;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.9em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-    white-space: nowrap;
-}
-
-.vtt-load-btn:hover {
-    background: #45a049;
-    transform: scale(1.05);
-}
-
-.vtt-load-btn:active {
-    transform: scale(0.95);
-}
-
-.extension-status {
-    background: #fff3cd;
-    border: 2px solid #ffc107;
-    border-radius: 8px;
-    padding: 12px;
-    margin-bottom: 15px;
-}
-
-.extension-status.connected {
-    background: #d4edda;
-    border-color: #28a745;
-}
-
-.extension-status.connected p {
-    color: #28a745 !important;
-}
-
-.clear-vtt-btn {
-    padding: 6px 12px;
-    background: #f44336;
-    color: white;
-    border: none;
-    border-radius: 6px;
-    font-size: 0.85em;
-    font-weight: 600;
-    cursor: pointer;
-    transition: all 0.3s ease;
-}
-
-.clear-vtt-btn:hover {
-    background: #da190b;
-}
-
-@keyframes slideIn {
-    from {
-        transform: translateX(100%);
-        opacity: 0;
-    }
-    to {
-        transform: translateX(0);
-        opacity: 1;
-    }
-}
-
-@keyframes slideOut {
-    from {
-        transform: translateX(0);
-        opacity: 1;
-    }
-    to {
-        transform: translateX(100%);
-        opacity: 0;
-    }
+.fetch-btn:disabled {
+    background: #ccc;
+    cursor: not-allowed;
+    transform: none;
 }
 
 .filter-options {

@@ -13,6 +13,18 @@
             <p class="subtitle">Remove unwanted characters from your text</p>
         </header>
 
+        <div class="vtt-section">
+            <label for="vttUrl">VTT Caption URL:</label>
+            <div class="vtt-input-group">
+                <input 
+                    type="text" 
+                    id="vttUrl" 
+                    placeholder="Paste VTT link here (e.g., https://example.com/captions.vtt)"
+                    class="vtt-input"
+                >
+                <button id="fetchVttBtn" class="fetch-btn">Load Captions</button>
+            </div>
+        </div>
 
         <div class="filter-options">
             <h3>Select what to remove:</h3>
@@ -56,7 +68,7 @@
             <label for="inputText">Input Text:</label>
             <textarea 
                 id="inputText" 
-                placeholder="Paste your text here or use the Vimeo import above..."
+                placeholder="Paste your text here or load captions from a VTT URL above..."
                 rows="10"
             ></textarea>
         </div>

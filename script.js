@@ -4,6 +4,8 @@ document.addEventListener('DOMContentLoaded', function() {
     const generateBtn = document.getElementById('generateBtn');
     const copyBtn = document.getElementById('copyBtn');
     const clearBtn = document.getElementById('clearBtn');
+    const vttUrl = document.getElementById('vttUrl');
+    const fetchVttBtn = document.getElementById('fetchVttBtn');
     
     const removeNumbers = document.getElementById('removeNumbers');
     const removeHyphens = document.getElementById('removeHyphens');
@@ -17,15 +19,7 @@ document.addEventListener('DOMContentLoaded', function() {
     generateBtn.addEventListener('click', filterText);
     copyBtn.addEventListener('click', copyToClipboard);
     clearBtn.addEventListener('click', clearAll);
-
-    // Check for VTT text in URL parameter (from extension)
-    const urlParams = new URLSearchParams(window.location.search);
-    const vttText = urlParams.get('vtt');
-    if (vttText) {
-        inputText.value = decodeURIComponent(vttText);
-        // Clear the URL parameter
-        window.history.replaceState({}, document.title, window.location.pathname);
-    }
+    fetchVttBtn.addEventListener('click', fetchFromVtt);
 
     inputText.addEventListener('keydown', function(e) {
         if (e.ctrlKey && e.key === 'Enter') {

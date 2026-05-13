@@ -1,41 +1,35 @@
-# Text Filter with Auto VTT Caption Detector
+# Text Filter with VTT Caption Support
 
-A powerful web application that filters unwanted characters from text, integrated with a Chrome Extension that automatically detects VTT caption files from ANY webpage.
+A simple web application that filters unwanted characters from text, with support for loading captions from VTT files.
 
 ## Features
 
 ✅ Remove numbers, hyphens, colons, angle brackets, slashes, and special characters  
 ✅ Remove periods only when next to numbers  
-✅ **Chrome Extension**: Automatically detects VTT caption files from ANY webpage in real-time  
-✅ One-click loading of detected captions directly into the app  
-✅ Works with Vimeo, YouTube, and any site that uses VTT captions  
+✅ Load captions directly from VTT URLs  
+✅ Automatic VTT parsing to extract clean text  
+✅ Works with any publicly accessible VTT caption file
 
 ## Quick Start
 
-### 1. Start the Web Server
+### Start the Web Server
 
 ```bash
-node server.js
+python start-server.py
 ```
 
 The app will be available at `http://localhost:8000`
 
-### 2. Install the Chrome Extension
-
-1. Open Chrome and go to `chrome://extensions/`
-2. Enable **Developer mode** (toggle in top right)
-3. Click **Load unpacked**
-4. Select this folder: `Number remover`
-5. The extension icon will appear in your toolbar
+Or simply open `index.html` in your browser.
 
 ## How to Use
 
-### Method 1: Automatic Detection (Recommended)
+### Method 1: Load from VTT URL
 
-1. **Play any video with captions** (e.g., Vimeo, YouTube with captions enabled)
-2. The extension will automatically detect VTT files
-3. Click the **extension icon** to see detected VTT files
-4. Click **"Load in App"** to instantly load captions into the text filter
+1. Find the VTT caption file URL (usually from browser Network tab)
+2. Paste the VTT URL into the "VTT Caption URL" field
+3. Click **"Load Captions"**
+4. The captions will be automatically parsed and loaded into the input
 5. Click **"Generate Filtered Text"** to clean the text
 
 ### Method 2: Manual Input
@@ -45,13 +39,14 @@ The app will be available at `http://localhost:8000`
 3. Click **"Generate Filtered Text"**
 4. Copy the filtered output
 
-## Extension Features
+### Finding VTT URLs
 
-- **Auto-detection**: Monitors all network requests for VTT files
-- **Badge counter**: Shows how many VTT files have been detected
-- **Persistent storage**: Detected URLs are saved even if you close the browser
-- **One-click loading**: Load captions directly into the app
-- **Copy URL**: Quickly copy VTT URLs to clipboard
+1. Open your browser's Developer Tools (F12)
+2. Go to the **Network** tab
+3. Play a video with captions enabled
+4. Filter by `.vtt` in the Network tab
+5. Right-click on the VTT request and **Copy URL**
+6. Paste the URL into the app
 
 ## Filters Available
 
@@ -67,16 +62,11 @@ The app will be available at `http://localhost:8000`
 ## Files
 
 - `index.html` - Main web application
-- `script.js` - Text filtering logic
+- `script.js` - Text filtering and VTT parsing logic
 - `styles.css` - Application styling
-- `server.js` - Node.js server
-- `manifest.json` - Chrome extension manifest
-- `background.js` - Extension background service worker
-- `popup.html` - Extension popup interface
-- `popup.js` - Extension popup logic
-- `content.js` - Content script for communication
+- `start-server.py` - Simple Python HTTP server (optional)
 
 ## Requirements
 
-- Node.js (for running the web server)
-- Google Chrome or Chromium-based browser
+- Modern web browser (Chrome, Firefox, Safari, Edge)
+- Python 3.x (optional, for local server)
