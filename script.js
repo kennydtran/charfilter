@@ -11,16 +11,50 @@ document.addEventListener('DOMContentLoaded', function() {
     
     // Filter state object
     const filterState = {
-        removeNumbers: true,
-        removeHyphens: true,
-        removeColons: true,
-        removeGreaterThan: true,
-        removeLessThan: true,
-        removeSlashes: true,
-        removePeriodsNextToNumbers: true,
+        removeTimestamps: true,
         keepSpaces: true,
         removeLineBreaks: true
     };
+
+    const TIMESTAMP_PATTERN = /\d{2}:\d{2}:\d{2}\.\d{3}/;
+    const TIMESTAMP_GLOBAL_PATTERN = new RegExp(TIMESTAMP_PATTERN.source, 'g');
+    const TIMESTAMP_LINE_PATTERN = new RegExp(
+        '^\\s*(?:\\d+\\s+)?' +
+        TIMESTAMP_PATTERN.source +
+        '\\s*-->\\s*' +
+        TIMESTAMP_PATTERN.source +
+        '(?:\\s+.*)?\\s*$'
+    );
+
+    function isTimestampLine(line) {
+        return TIMESTAMP_LINE_PATTERN.test(line);
+    }
+
+    function isCueIdentifier(line, nextLine) {
+        return nextLine !== undefined &&
+            line.trim() !== '' &&
+            !isTimestampLine(line) &&
+            isTimestampLine(nextLine);
+    }
+
+    function removeTimestampLayout(text) {
+        const lines = text.split(/\r?\n/);
+        const kept = [];
+
+        for (let i = 0; i < lines.length; i++) {
+            const line = lines[i];
+            const nextLine = lines[i + 1];
+
+            if (isCueIdentifier(line, nextLine) || isTimestampLine(line)) {
+                continue;
+            }
+
+            TIMESTAMP_GLOBAL_PATTERN.lastIndex = 0;
+            kept.push(line.replace(TIMESTAMP_GLOBAL_PATTERN, ''));
+        }
+
+        return kept.join('\n');
+    }
 
     // Initialize filter buttons
     const filterButtons = document.querySelectorAll('.filter-btn');
@@ -98,37 +132,8 @@ document.addEventListener('DOMContentLoaded', function() {
 
         let filtered = text;
 
-        if (filterState.removePeriodsNextToNumbers) {
-            filtered = filtered.replace(/\d+\.\d*/g, function(match) {
-                return match.replace(/\./g, '');
-            });
-            filtered = filtered.replace(/\.\d+/g, function(match) {
-                return match.replace(/\./g, '');
-            });
-        }
-
-        if (filterState.removeNumbers) {
-            filtered = filtered.replace(/[0-9]/g, '');
-        }
-
-        if (filterState.removeHyphens) {
-            filtered = filtered.replace(/-/g, '');
-        }
-
-        if (filterState.removeColons) {
-            filtered = filtered.replace(/:/g, '');
-        }
-
-        if (filterState.removeGreaterThan) {
-            filtered = filtered.replace(/>/g, '');
-        }
-
-        if (filterState.removeLessThan) {
-            filtered = filtered.replace(/</g, '');
-        }
-
-        if (filterState.removeSlashes) {
-            filtered = filtered.replace(/\//g, '');
+        if (filterState.removeTimestamps) {
+            filtered = removeTimestampLayout(filtered);
         }
 
         if (filterState.removeLineBreaks) {

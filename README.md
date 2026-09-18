@@ -4,10 +4,9 @@ A simple web application that filters unwanted characters from text, with suppor
 
 ## Features
 
-✅ Remove numbers, hyphens, colons, angle brackets, slashes, and special characters  
-✅ Remove periods only when next to numbers  
+✅ Remove VTT cue numbers and timestamps (`xx:xx:xx.xxx --> xx:xx:xx.xxx`) without touching caption text  
 ✅ Load captions directly from VTT URLs  
-✅ Automatic VTT parsing to extract clean text  
+✅ Optional whitespace and line-break cleanup  
 ✅ Works with any publicly accessible VTT caption file
 
 ## Quick Start
@@ -35,7 +34,7 @@ Or simply open `index.html` in your browser.
 ### Method 2: Manual Input
 
 1. Paste any text into the input box
-2. Select which characters to remove using the checkboxes
+2. Use the filter buttons if you want to keep timestamps, whitespace, or line breaks
 3. Click **"Generate Filtered Text"**
 4. Copy the filtered output
 
@@ -50,14 +49,9 @@ Or simply open `index.html` in your browser.
 
 ## Filters Available
 
-- Numbers (0-9)
-- Hyphens (-)
-- Colons (:)
-- Greater Than (>)
-- Less Than (<)
-- Forward Slashes (/)
-- Periods next to numbers (3.14 → 314, but test.com stays testcom)
-- Keep/Remove spaces option
+- Timestamp: cue identifiers and `xx:xx:xx.xxx` timing lines (for example `1` followed by `00:00:01.120 --> 00:00:05.060`). Caption wording, including numbers in the script, is left intact.
+- Whitespace: keep or strip spaces
+- Line Break: keep or collapse line breaks
 
 ## Files
 
